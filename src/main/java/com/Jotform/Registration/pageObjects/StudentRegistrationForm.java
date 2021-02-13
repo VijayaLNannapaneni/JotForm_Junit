@@ -27,15 +27,17 @@ public class StudentRegistrationForm extends BasePage{
     WebElement workNum = driver.findElement(By.id("input_26_full"));
     WebElement phoneNo = driver.findElement(By.id("input_25_full"));
     WebElement company = driver.findElement(By.id("input_14"));
-    Select drpcourses = new Select(driver.findElement(By.id("input_46")));
+    Select drpcourses = new Select(driver.findElement(By.id("input_46")));   
     WebElement comments = driver.findElement(By.id("id_45"));
     WebElement header = driver.findElement(By.id("subHeader_1"));
     WebElement btnSubmit = driver.findElement(By.id("input_20"));
     String firstName = "";
     String middleName = "";
     String lastName = "";
+    
     public StudentRegistrationForm() throws IOException {
     }
+    
     public void loadStudentRegistrationPage() {
         String URL= "https://www.jotform.com/form-templates/class-registration-3";//Constants.url;
         String actualText = "Fill out the form carefully for registration";
@@ -68,9 +70,16 @@ public class StudentRegistrationForm extends BasePage{
         String sCompany = "XYZ Company";
         String sCourse = "Math 101";
         String sComments = "I am interested in this course because ........................................";
-        fName.sendKeys(firstName);
-        mName.sendKeys(middleName);
-        lName.sendKeys(lastName);
+       
+        if(isElementPresent(fName,10)) {
+        	fName.sendKeys(firstName);
+        }
+        if(isElementPresent(mName,10)) {
+        	mName.sendKeys(middleName);
+        }
+        if(isElementPresent(mName,10)) {
+        	lName.sendKeys(lastName);
+        }       
         drpdob_month.selectByVisibleText(month);
         drpdob_year.selectByVisibleText(year);
         drpdob_day.selectByVisibleText(day);
@@ -80,12 +89,14 @@ public class StudentRegistrationForm extends BasePage{
         city.sendKeys(fCity);
         state.sendKeys(fState);
         zipcode.sendKeys(fZipCode);
-        email.sendKeys(fEmail);
+        Assert.assertEquals(true, fEmail.length()> 0);
+        email.sendKeys(fEmail);     
         mobileNo.sendKeys(cellPhone);
         workNum.sendKeys(workPhone);
         phoneNo.sendKeys(Phone);
-        company.sendKeys(sCompany);
+        company.sendKeys(sCompany);        
         drpcourses.selectByVisibleText(sCourse);
+        Assert.assertEquals(sCourse, drpcourses);
         comments.sendKeys(sComments);
     }
     public void submitForm() throws IOException, InterruptedException {
