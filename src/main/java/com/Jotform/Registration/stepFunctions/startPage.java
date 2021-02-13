@@ -1,6 +1,7 @@
 package com.Jotform.Registration.stepFunctions;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.Assert;
@@ -37,8 +38,7 @@ public class startPage{
 	@Test
 	public void assertContent() {		
 		String expectedTitle = "Course Registration Form Template | JotForm";
-		String actualTitle = "";  
-		
+		String actualTitle = ""; 		
 		// get the actual value of the title
 		actualTitle = driver.getTitle();
 		System.out.println(actualTitle);
@@ -55,16 +55,19 @@ public class startPage{
 	}
 	
 	@Test
-	public void enterStudentData() throws Exception{	
+	public void enterStudentData() throws Exception{		
 		Faker faker = new Faker();		
-		driver.manage().timeouts().implicitlyWait(10,TimeUnit.SECONDS) ;
+		driver.manage().timeouts().implicitlyWait(15,TimeUnit.SECONDS) ;
 		//List<WebElement> iframes = driver.findElements(By.xpath("//iframe[contains(@src,'//www.googletagmanager.com/ns.html?id=GTM-TDFT5J')]"));
 		//System.out.print( " iframes " + iframes.size());		
 		//WebElement modal = driver.findElement(By.xpath("//*[@id=\"formPreviewArea\"]"));		
 		//driver.switchTo().frame(modal);
 		//driver.manage().timeouts().implicitlyWait(10,TimeUnit.SECONDS) ;
+		//WebElement GeneralFrame = driver.findElement(By.xpath("//*[@id=\"23114306030131\"]/input[1]"));
+		//driver.switchTo().frame(GeneralFrame); 		
+		//driver.manage().timeouts().implicitlyWait(10,TimeUnit.SECONDS) ;
 		// Can't get to these form elements
-		WebElement fName = driver.findElement(By.id("first_4"));
+		WebElement fName = driver.findElement(By.xpath("//*[@id=\"first_4\"]"));
 		WebElement mName = driver.findElement(By.id("middle_4"));
 		WebElement lName = driver.findElement(By.id("last_4"));
 		Select drpdob_month = new Select(driver.findElement(By.id("input_24_month")));
@@ -126,16 +129,10 @@ public class startPage{
     	drpcourses.selectByVisibleText(sCourse);
      	comments.sendKeys(sComments);
 	}
+   
     @AfterClass
     public static void tearDown(){
     	driver.quit();
-    }
-        
-        
-   
+    }        
   
-	
-
-	
-
 }
