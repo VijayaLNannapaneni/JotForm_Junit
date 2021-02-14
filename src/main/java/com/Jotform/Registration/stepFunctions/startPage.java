@@ -30,6 +30,7 @@ public class startPage{
 	static WebElement fName ;
 	static WebElement mName ;
 	static WebElement lName ;
+
 	@BeforeClass	
 	public static void	openBrowser(){
 		System.setProperty("webdriver.chrome.driver","\\Drivers\\chromedriver.exe");
@@ -62,16 +63,15 @@ public class startPage{
 		} else {
 			System.out.println("Wrong Page");
 		} 
-	
 	}
 
 	public void enterStudentDataAndSubmit() throws Exception{
-		System.out.println(" Enter student data and submit form ...");
+		System.out.println("Enter student data and submit form ...");
 		Faker faker = new Faker();
 		JavascriptExecutor js = (JavascriptExecutor) driver;				
 		driver.switchTo().frame(driver.findElement(By.tagName("object")));		
+		WebElement btnSubmit = driver.findElement(By.id("input_20"));
 		fName = driver.findElement(By.id("first_4"));
-		WebElement btnSubmit = driver.findElement(By.id("input_20"));		
 		mName = driver.findElement(By.id("middle_4"));
 		lName = driver.findElement(By.id("last_4"));
 		Select drpdob_month = new Select(driver.findElement(By.id("input_24_month")));
@@ -125,12 +125,11 @@ public class startPage{
 		phoneNo.sendKeys(Phone);
 		company.sendKeys(sCompany);
 		drpcourses.selectByVisibleText(sCourse);		   
-		if ((firstName.length() > 0) & (lastName.length() > 0)) {		        
+		if ((firstName.length() > 0) & (lastName.length() > 0)) {     
 		 	//btnSubmit.click();
 		  	js.executeScript("arguments[0].click();",btnSubmit);		  	
 		  	System.out.println("Successfully submitted form");		  	
-		}	
-		   
+		}
 	}	
 	
 	public void assertName() throws IOException, InterruptedException {
@@ -145,8 +144,8 @@ public class startPage{
 		firstN.contentEquals(firstName);
 		middleN.contentEquals(middleName);
 		lastN.contentEquals(lastName);       
-        System.out.println("Record saved successfully");
-   } 
+        System.out.println("Record saved successfully"); 
+	}	
 	
     @AfterClass
     public static void tearDown(){
@@ -155,3 +154,4 @@ public class startPage{
     }        
   
 }
+

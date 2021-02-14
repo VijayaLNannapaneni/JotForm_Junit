@@ -86,4 +86,8 @@ public class BasePage extends DriverFactory {
         }
 
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> c2f82a6ba23ca5acfd9efd321ae4527274c2faf0
