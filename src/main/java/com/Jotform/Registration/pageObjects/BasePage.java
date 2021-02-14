@@ -1,26 +1,28 @@
 package com.Jotform.Registration.pageObjects;
-
 import java.io.IOException;
-
+import java.util.NoSuchElementException;
+import java.util.concurrent.TimeUnit;
 import org.junit.Assert;
+import org.openqa.selenium.By;
+import org.openqa.selenium.ElementNotVisibleException;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.NoSuchFrameException;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
 import com.Jotform.Registration.utils.DriverFactory;
 
 public class BasePage extends DriverFactory {
     protected WebDriverWait wait;
-    protected JavascriptExecutor jsExecutor;
-    public static String webData = null;
+    protected JavascriptExecutor jsExecutor;   
     public BasePage() throws IOException {
         this.wait = new WebDriverWait(driver, 15);
         jsExecutor = ((JavascriptExecutor) driver);
     }
     
     public BasePage loadPageAndAssertContent(String url, String title) throws Exception {
-    	System.setProperty("webdriver.chrome.driver","C:\\Drivers\\chromedriver.exe");    	       
+    	System.setProperty("webdriver.chrome.driver","\\Drivers\\chromedriver.exe");    	       
         String actualTitle = "";    
         driver.get(url);
         // get the actual value of the title
@@ -33,14 +35,12 @@ public class BasePage extends DriverFactory {
             System.out.println("Success!");
         } else {
             System.out.println("Wrong Page");
-        }      
-    	
-    	
-    	
+        }	
     	
         driver.navigate().to(url);
         return new BasePage();
     }
+    //wait methods
     public boolean WaitUntilWebElementIsVisible(WebElement element) {
         try {
             this.wait.until(ExpectedConditions.visibilityOf(element));
@@ -70,5 +70,20 @@ public class BasePage extends DriverFactory {
             attempts++;
         }
     }
-    
+    //Wait and Check if webelement is present
+    public boolean isElementPresent(WebElement element,int timeOutInSeconds) {
+        try {
+        	WebDriverWait wait = new WebDriverWait(driver, timeOutInSeconds);           
+            wait.ignoring(NoSuchElementException.class);
+            wait.ignoring(ElementNotVisibleException.class);
+            wait.ignoring(StaleElementReferenceException.class);
+            wait.ignoring(NoSuchFrameException.class);
+            wait.until(ExpectedConditions.visibilityOfElementLocated((By) element));
+        return true;
+        }
+        catch(Exception e) {
+            return false;
+        }
+
+    }
 }
