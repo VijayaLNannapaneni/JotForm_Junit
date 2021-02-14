@@ -92,11 +92,11 @@ public class startPage{
 		WebElement comments = driver.findElement(By.id("id_45"));
 		WebElement header = driver.findElement(By.id("subHeader_1"));  
 		firstName = faker.name().firstName();
-		middleName = faker.name().nameWithMiddle();
+		middleName = "L";
 		lastName = faker.name().lastName();
 		String fAddress1 = faker.address().streetName();
 		String fCity = faker.address().city();
-	    String fZipCode = faker.address().zipCode();
+	        String fZipCode = faker.address().zipCode();
 		String fState = faker.address().state();
 		String fEmail = faker.internet().emailAddress();
 		String workPhone = faker.phoneNumber().cellPhone();
