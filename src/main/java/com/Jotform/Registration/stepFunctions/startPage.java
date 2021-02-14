@@ -1,9 +1,9 @@
 package com.Jotform.Registration.stepFunctions;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.concurrent.TimeUnit;
-
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -24,19 +24,30 @@ import org.openqa.selenium.JavascriptExecutor;
 public class startPage{
 	static WebDriver driver;
 	String baseUrl = "https://www.jotform.com/form-templates/class-registration-3";
-	
+	String firstName = "";
+	String middleName = "";
+	String lastName = "";
+	WebElement fName ;
+	WebElement mName ;
+	WebElement lName ;
 	@BeforeClass	
 	public static void	openBrowser(){
 		System.setProperty("webdriver.chrome.driver","\\Drivers\\chromedriver.exe");
 		driver = new ChromeDriver();
-		driver.manage().window().maximize();
-		driver.manage().timeouts().implicitlyWait(30,TimeUnit.SECONDS);
+		driver.manage().window().maximize();		
 		String baseUrl = "https://www.jotform.com/form-templates/class-registration-3";
 		driver.get(baseUrl);
 	}
-
+	
 	@Test
-	public void assertContent() {		
+	public void firstThree() throws Exception{
+		assertContent();
+		enterStudentDataAndSubmit();
+		assertName();
+	}
+
+	public void assertContent() {
+		System.out.println("Assert title ..");
 		String expectedTitle = "Course Registration Form Template | JotForm";
 		String actualTitle = ""; 		
 		// get the actual value of the title
@@ -53,23 +64,17 @@ public class startPage{
 		} 
 	
 	}
-	
-	@Test
-	public void enterStudentData() throws Exception{		
-		Faker faker = new Faker();		
-		driver.manage().timeouts().implicitlyWait(15,TimeUnit.SECONDS) ;
-		//List<WebElement> iframes = driver.findElements(By.xpath("//iframe[contains(@src,'//www.googletagmanager.com/ns.html?id=GTM-TDFT5J')]"));
-		//System.out.print( " iframes " + iframes.size());		
-		//WebElement modal = driver.findElement(By.xpath("//*[@id=\"formPreviewArea\"]"));		
-		//driver.switchTo().frame(modal);
-		//driver.manage().timeouts().implicitlyWait(10,TimeUnit.SECONDS) ;
-		//WebElement GeneralFrame = driver.findElement(By.xpath("//*[@id=\"23114306030131\"]/input[1]"));
-		//driver.switchTo().frame(GeneralFrame); 		
-		//driver.manage().timeouts().implicitlyWait(10,TimeUnit.SECONDS) ;
-		// Can't get to these form elements
-		WebElement fName = driver.findElement(By.xpath("//*[@id=\"first_4\"]"));
-		WebElement mName = driver.findElement(By.id("middle_4"));
-		WebElement lName = driver.findElement(By.id("last_4"));
+
+	public void enterStudentDataAndSubmit() throws Exception{
+		System.out.println("Enter student data and submit form ...");
+		Faker faker = new Faker();
+		JavascriptExecutor js = (JavascriptExecutor) driver;				
+		driver.switchTo().frame(driver.findElement(By.tagName("object")));		
+		//WebElement fName = driver.findElement(By.id("first_4"));
+		WebElement btnSubmit = driver.findElement(By.id("input_20"));
+		fName = driver.findElement(By.xpath("//input[@name='q4_studentName[first]']"));
+		mName = driver.findElement(By.id("middle_4"));
+		lName = driver.findElement(By.id("last_4"));
 		Select drpdob_month = new Select(driver.findElement(By.id("input_24_month")));
 		Select drpdob_year = new Select(driver.findElement(By.id("input_24_year")));
 		Select drpdob_day = new Select(driver.findElement(By.id("input_24_day")));
@@ -78,61 +83,72 @@ public class startPage{
 		WebElement address2 = driver.findElement(By.id("input_23_addr_line2"));
 		WebElement city = driver.findElement(By.id("input_23_city"));
 		WebElement state = driver.findElement(By.id("input_23_state"));
-    	WebElement zipcode = driver.findElement(By.id("input_23_postal"));
-    	WebElement email = driver.findElement(By.id("input_6"));
-    	WebElement mobileNo = driver.findElement(By.id("input_27_full"));
-    	WebElement workNum = driver.findElement(By.id("input_26_full"));
-    	WebElement phoneNo = driver.findElement(By.id("input_25_full"));
-    	WebElement company = driver.findElement(By.id("input_14"));
-    	Select drpcourses = new Select(driver.findElement(By.id("input_46")));
-    	WebElement comments = driver.findElement(By.id("id_45"));
-    	WebElement header = driver.findElement(By.id("subHeader_1"));
-    	WebElement btnSubmit = driver.findElement(By.id("input_20"));
-    	String firstName = "";
-    	String middleName = "";
-    	String lastName = "";
-    	firstName = faker.name().firstName();
-    	middleName = faker.name().nameWithMiddle();
-    	lastName = faker.name().lastName();
-    	String fAddress1 = faker.address().streetName();
-    	String fCity = faker.address().city();
-    	String fZipCode = faker.address().zipCode();
-    	String fState = faker.address().state();
-    	String fEmail = faker.internet().emailAddress();
-    	String workPhone = faker.phoneNumber().cellPhone();
-    	String cellPhone = faker.phoneNumber().cellPhone();
-    	String Phone = faker.phoneNumber().phoneNumber();
-    	String gender = "N/A";
-    	String month = "November";
-    	String year = "2000";
-    	String day = "15";
-    	String sCompany = "XYZ Company";
-    	String sCourse = "Math 101";
-    	String sComments = "I am interested in this course because ........................................";
-    	fName.sendKeys(firstName);
-    	mName.sendKeys(middleName);
-    	lName.sendKeys(lastName);
-    	drpdob_month.selectByVisibleText(month);
-    	drpdob_year.selectByVisibleText(year);
-    	drpdob_day.selectByVisibleText(day);
-    	drpGender.selectByVisibleText(gender);
-    	address1.sendKeys(fAddress1);
-    	//address2.sendKeys();
-    	city.sendKeys(fCity);
-    	state.sendKeys(fState);
-    	zipcode.sendKeys(fZipCode);
-    	email.sendKeys(fEmail);
-    	mobileNo.sendKeys(cellPhone);
-    	workNum.sendKeys(workPhone);
-    	phoneNo.sendKeys(Phone);
-    	company.sendKeys(sCompany);
-    	drpcourses.selectByVisibleText(sCourse);
-     	comments.sendKeys(sComments);
-	}
-   
+		WebElement zipcode = driver.findElement(By.id("input_23_postal"));
+		WebElement email = driver.findElement(By.id("input_6"));
+		WebElement mobileNo = driver.findElement(By.id("input_27_full"));
+		WebElement workNum = driver.findElement(By.id("input_26_full"));
+		WebElement phoneNo = driver.findElement(By.id("input_25_full"));
+		WebElement company = driver.findElement(By.id("input_14"));
+		Select drpcourses = new Select(driver.findElement(By.id("input_46")));
+		WebElement comments = driver.findElement(By.id("id_45"));
+		WebElement header = driver.findElement(By.id("subHeader_1"));  
+		firstName = faker.name().firstName();
+		middleName = faker.name().nameWithMiddle();
+		lastName = faker.name().lastName();
+		String fAddress1 = faker.address().streetName();
+		String fCity = faker.address().city();
+	    	String fZipCode = faker.address().zipCode();
+		String fState = faker.address().state();
+		String fEmail = faker.internet().emailAddress();
+		String workPhone = faker.phoneNumber().cellPhone();
+		String cellPhone = faker.phoneNumber().cellPhone();
+		String Phone = faker.phoneNumber().phoneNumber();
+		String gender = "N/A";
+		String month = "November";
+		String year = "2000";
+		String day = "15";
+		String sCompany = "XYZ Company";
+		String sCourse = "Math 101";		    
+		fName.sendKeys(firstName);
+		mName.sendKeys(middleName);
+		lName.sendKeys(lastName);
+		drpdob_month.selectByVisibleText(month);
+		drpdob_year.selectByVisibleText(year);
+		drpdob_day.selectByVisibleText(day);
+		drpGender.selectByVisibleText(gender);
+		address1.sendKeys(fAddress1);		
+		city.sendKeys(fCity);
+		state.sendKeys(fState);
+		zipcode.sendKeys(fZipCode);
+		email.sendKeys(fEmail);
+		mobileNo.sendKeys(cellPhone);
+		workNum.sendKeys(workPhone);
+		phoneNo.sendKeys(Phone);
+		company.sendKeys(sCompany);
+		drpcourses.selectByVisibleText(sCourse);		   
+		if ((firstName.length() > 0) & (lastName.length() > 0)) {		        
+		 //btnSubmit.click();
+		  js.executeScript("arguments[0].click();",btnSubmit); 
+		  driver.manage().timeouts().implicitlyWait(6,TimeUnit.SECONDS);
+		  System.out.println("Successfully submitted form");		  	
+		}	
+		   
+	}	
+	public void assertName() throws IOException, InterruptedException {
+		System.out.println("Assert Name");
+		System.out.println(firstName +middleName+lastName);		
+       		// Assert first name, Last name and Middle Name of the student after submitting the form
+       		Assert.assertTrue(fName.getAttribute("value").equals(firstName));
+       		Assert.assertTrue(mName.getAttribute("value").equals(middleName));
+        	Assert.assertTrue(lName.getAttribute("value").equals(lastName));
+        	System.out.println("Record saved successfully");
+     } 
+	
     @AfterClass
     public static void tearDown(){
+    	// tear down chrome driver
     	driver.quit();
     }        
   
 }
+
